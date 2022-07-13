@@ -1,4 +1,4 @@
-FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest as build
+FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker as build
 
 LABEL maintainer="=song22861@naver.com"
 
@@ -19,7 +19,7 @@ ENV PATH=${PATH}:./node_modules/.bin
 RUN nest build gateway \
  && rm -fr apps libs
 
-FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest as hello-aws-docker
+FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker as hello-aws-docker
 
 WORKDIR /hello-aws-docker
 

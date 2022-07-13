@@ -57,8 +57,8 @@ jobs:
           TAG: ${{ github.sha }}
           PEM: ${{ secrets.SSH_PEM_KEY }}
         run: |
-          echo "== build ======================================================="
+          echo "== build ========================================================"
           docker build --build-arg NODE_ENV=development -t ${ECR}/hello-aws-docker:development -t ${ECR}/hello-aws-docker:development-${TAG} .
-          echo "== push ========================================================"
+          echo "== push ========================================================="
           docker push ${ECR}/hello-aws-docker --all-tags
           bash ./deploy.sh development

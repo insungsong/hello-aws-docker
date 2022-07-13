@@ -58,7 +58,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           echo "== build ======================================================="
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker build -t hello-aws-docker .
+          docker push 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest
+          echo "done!!!"
           echo "== build ======================================================="

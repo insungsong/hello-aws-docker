@@ -51,14 +51,13 @@ jobs:
           echo -e "$PEM" > hello-aws-docker.pem
           chmod 400 hello-aws-docker.pem
 
-      - name: Decrypt development.env, Docker build and push image to Amazon ECR and Development Deploy
+      - name: Docker build and push image to Amazon ECR and Development Deploy
         env:
           ECR: ${{ steps.login-ecr.outputs.registry }}
           TAG: ${{ github.sha }}
           PEM: ${{ secrets.SSH_PEM_KEY }}
         if: ${{ github.ref == 'refs/heads/develop' }}
         run: |
-          # sops --input-type dotenv --output-type dotenv -d development.env.encrypted > development.env
           echo "== build ======================================================="
           docker build --build-arg NODE_ENV=development -t ${ECR}/hello-aws-docker:development -t ${ECR}/hello-aws-docker:development-${TAG} .
           echo "== push ========================================================"

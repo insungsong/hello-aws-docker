@@ -51,14 +51,12 @@ jobs:
           echo -e "$PEM" > hello-aws-docker.pem
           chmod 400 hello-aws-docker.pem
 
-      - name: Docker build and push image to Amazon ECR and Development Deploy
+      - name: Build, tag, and push image to Amazon ECR
+        id: hello-aws-docker-image
         env:
-          ECR: ${{ steps.login-ecr.outputs.registry }}
-          TAG: ${{ github.sha }}
-          PEM: ${{ secrets.SSH_PEM_KEY }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo "== build ========================================================"
-          docker build --build-arg NODE_ENV=development -t ${ECR}/hello-aws-docker:development -t ${ECR}/hello-aws-docker:development-${TAG} .
-          echo "== push ========================================================="
-          docker push ${ECR}/hello-aws-docker --all-tags
-          bash ./deploy.sh development
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"

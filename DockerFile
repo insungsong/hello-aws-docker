@@ -1,6 +1,6 @@
 FROM 719823691862.dkr.ecr.us-east-1.amazonaws.com/hello-aws-docker:latest as build
 
-LABEL maintainer="whyiroffical@gmail.com"
+LABEL maintainer="=song22861@naver.com"
 
 WORKDIR /hello-aws-docker
 

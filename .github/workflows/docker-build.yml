@@ -59,6 +59,7 @@ jobs:
         run: |
           echo "== build ======================================================="
           docker build -t hello-aws-docker .
+          docker tag hello-aws-docker:latest 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest
           docker push 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest
           echo "done!!!"
           echo "== build ======================================================="

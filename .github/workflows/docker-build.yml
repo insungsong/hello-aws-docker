@@ -1,6 +1,9 @@
-name: Docker Build & Push
+name: Docker Build & Deploy for EC2
 
-on: [push]
+on:
+  push:
+    branches:
+      - 'develop'
 
 jobs:
   build:
@@ -10,6 +13,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Import PGP(gpg) credentials
+        run: |
+          echo -e "$PGP_PRIVATE_KEY" | gpg --import
+        env:
+          PGP_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
+
+      - name: Ckeck GPG Key
+        run: |
+          gpg --version
+          gpg --list-key song22861@naver.com
+
+      - name: Install sops
+        env:
+          SOPS_VERSION: v3.7.1
+        run: |
+          wget https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux
+          chmod +x ./sops-${SOPS_VERSION}.linux
+          sudo mv ./sops-${SOPS_VERSION}.linux /usr/local/bin/sops
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -22,14 +44,23 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+      - name: Generate Pem
+        env:
+          PEM: ${{ secrets.SSH_PEM_KEY }}
+        run: |
+          echo -e "$PEM" > hello-aws-docker-dev.pem
+          chmod 400 hello-aws-docker-dev.pem
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Build and Push
+      - name: Decrypt development.env, Docker build and push image to Amazon ECR and Development Deploy
         env:
           ECR: ${{ steps.login-ecr.outputs.registry }}
           TAG: ${{ github.sha }}
-        run: docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t ${ECR}/hello-aws-docker:latest -t ${ECR}/hello-aws-docker:${TAG} .
+          PEM: ${{ secrets.SSH_PEM_KEY }}
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        run: |
+          sops --input-type dotenv --output-type dotenv -d development.env.encrypted > development.env
+          echo "== build ======================================================="
+          docker build --build-arg NODE_ENV=development -t ${ECR}/hello-aws-docker:development -t ${ECR}/hello-aws-docker:development-${TAG} .
+          echo "== push ========================================================"
+          docker push ${ECR}/hello-aws-docker --all-tags
+          bash ./deploy.sh development

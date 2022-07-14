@@ -1,16 +1,26 @@
-FROM node:14.18.1-bullseye
+FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest as build
 
 LABEL maintainer="song22861@naver.com"
 
-RUN apt-get update -y \
- && apt-get upgrade -y \
- && apt-get install -y curl glib2.0-dev gpg libglu1-mesa-dev libglib2.0-dev libvips-dev libvips-tools nfs-common xvfb xz-utils expect \
- && rm -rf /var/lib/apt/lists/*
+WORKDIR /hello-aws-docker
+
+ARG NODE_ENV
+ENV NODE_ENV=${NODE_ENV}
+
+COPY ./apps ./apps
+COPY ./nest-cli.json .
+COPY ./package.json .
+COPY ./tsconfig.json .
+COPY ./tsconfig.build.json .
+COPY ./${NODE_ENV}.env .
+
+ENV PATH=${PATH}:./node_modules/.bin
+
+RUN nest build gateway \
+ && rm -fr apps libs
+
+FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest as hello-aws-docker
 
 WORKDIR /hello-aws-docker
 
-COPY --chown=node:node package.json /hello-aws-docker/package.json
-
-RUN npm install -g npm \
-&& npm i -g @nestjs/cli \
-&& npm install
+COPY --from=build /hello-aws-docker /hello-aws-docker

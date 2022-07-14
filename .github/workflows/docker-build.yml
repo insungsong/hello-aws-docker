@@ -58,9 +58,7 @@ jobs:
           PEM: ${{ secrets.SSH_PEM_KEY }}
         if: ${{ github.ref == 'refs/heads/develop' }}
         run: |
-          sops --input-type dotenv --output-type dotenv -d development.env.encrypted > development.env
           echo "== build ======================================================="
-          docker build --build-arg NODE_ENV=development -t ${ECR}/hello-aws-docker:development -t ${ECR}/hello-aws-docker:development-${TAG} .
+          docker tag hello-aws-docker:latest 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest
           echo "== push ========================================================"
-          docker push ${ECR}/hello-aws-docker --all-tags
-          bash ./deploy.sh development
+          docker push 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest

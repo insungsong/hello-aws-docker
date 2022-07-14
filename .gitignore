@@ -165,3 +165,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 Footer
+docker.env

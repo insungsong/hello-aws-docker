@@ -8,6 +8,7 @@ ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}
 
 COPY ./apps ./apps
+COPY ./libs ./libs
 COPY ./nest-cli.json .
 COPY ./package.json .
 COPY ./tsconfig.json .
@@ -15,8 +16,7 @@ COPY ./tsconfig.build.json .
 
 ENV PATH=${PATH}:./node_modules/.bin
 
-RUN nest build gateway \
- && rm -fr apps
+RUN nest build gateway
 
 FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest as hello-aws-docker
 

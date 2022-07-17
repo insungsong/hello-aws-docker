@@ -4,16 +4,12 @@ LABEL maintainer="whyirofficial@gamil.com"
 
 WORKDIR /hello-aws-docker
 
-ARG NODE_ENV
-ENV NODE_ENV=${NODE_ENV}
-
 COPY ./apps ./apps
 COPY ./nest-cli.json .
 COPY ./package.json .
 COPY ./tsconfig.json .
 COPY ./tsconfig.build.json .
 
-ENV PATH=${PATH}:./node_modules/.bin
 
 RUN nest build gateway \
 && rm -fr apps

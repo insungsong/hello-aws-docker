@@ -31,6 +31,6 @@ for IP in ${IP_LIST};
 do
     echo '===================='
     echo ${IP}
-    ssh  -o "StrictHostKeyChecking no" -i capa-api.pem ubuntu@${IP} /home/ubuntu/deploy.sh ${STAGE}
+    ssh  -o "StrictHostKeyChecking no" -i hello-aws-docker.pem ubuntu@${IP} /home/ubuntu/deploy.sh ${STAGE}
     sleep 3
 done;

@@ -8,7 +8,6 @@ ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}
 
 COPY ./apps ./apps
-COPY ./libs ./libs
 COPY ./nest-cli.json .
 COPY ./package.json .
 COPY ./tsconfig.json .

@@ -15,7 +15,8 @@ COPY ./tsconfig.build.json .
 
 ENV PATH=${PATH}:./node_modules/.bin
 
-RUN nest build gateway
+RUN nest build gateway \
+&& rm -fr apps
 
 FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest as hello-aws-docker
 

@@ -20,7 +20,5 @@ services:
       - ./tsconfig.json:/hello-aws-docker/tsconfig.json
       - ./tsconfig.build.json:/hello-aws-docker/tsconfig.build.json
       - ./docker.env:/hello-aws-docker/docker.env
-      - ./schema.gql:/hello-aws-docker/schema.gql
-      - /tmp:/tmp
     working_dir: /hello-aws-docker
     entrypoint: ['nest', 'start', 'gateway', '--watch']

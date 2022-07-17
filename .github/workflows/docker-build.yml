@@ -48,8 +48,8 @@ jobs:
         env:
           PEM: ${{ secrets.SSH_PEM_KEY }}
         run: |
-          echo -e "$PEM" > hello-aws-docker-dev.pem
-          chmod 400 hello-aws-docker-dev.pem
+          echo -e "$PEM" > hello-aws-docker.pem
+          chmod 400 hello-aws-docker.pem
 
       - name: Decrypt development.env, Docker build and push image to Amazon ECR and Development Deploy
         env:
@@ -59,6 +59,6 @@ jobs:
         if: ${{ github.ref == 'refs/heads/develop' }}
         run: |
           echo "== build ======================================================="
-          docker tag 2192e6a6dff15d2b5de2b4a08abd0c179df176fc 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest
+          docker build --build-arg NODE_ENV=development -t 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest -t 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest .
           echo "== push ========================================================"
-          docker push 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest
+          docker push 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest --all-tags

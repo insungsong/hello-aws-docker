@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  gateway:
+    image: 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest
+    container_name: gateway
+    hostname: gateway
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.80'
+          memory: '10g'
+    ports:
+      - 3000:3000
+    volumes:
+      - ./apps:/hello-aws-docker/apps
+      - ./libs:/hello-aws-docker/libs
+      - ./nest-cli.json:/hello-aws-docker/nest-cli.json
+      - ./package.json:/hello-aws-docker/package.json
+      - ./tsconfig.json:/hello-aws-docker/tsconfig.json
+      - ./tsconfig.build.json:/hello-aws-docker/tsconfig.build.json
+      - ./docker.env:/hello-aws-docker/docker.env
+      - ./schema.gql:/hello-aws-docker/schema.gql
+      - /tmp:/tmp
+    working_dir: /hello-aws-docker
+    entrypoint: ['nest', 'start', 'gateway', '--watch']

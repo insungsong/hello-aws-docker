@@ -12,12 +12,11 @@ COPY ./nest-cli.json .
 COPY ./package.json .
 COPY ./tsconfig.json .
 COPY ./tsconfig.build.json .
-COPY ./${NODE_ENV}.env .
 
 ENV PATH=${PATH}:./node_modules/.bin
 
 RUN nest build gateway \
- && rm -fr apps libs
+ && rm -fr apps
 
 FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest as hello-aws-docker
 

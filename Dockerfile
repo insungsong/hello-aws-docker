@@ -11,8 +11,7 @@ COPY ./tsconfig.json .
 COPY ./tsconfig.build.json .
 
 
-RUN nest build gateway \
-&& rm -fr apps
+RUN nest build gateway 
 
 FROM 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest as hello-aws-docker
 

@@ -59,6 +59,6 @@ jobs:
         if: ${{ github.ref == 'refs/heads/develop' }}
         run: |
           echo "== build ======================================================="
-          docker build -t 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest -t 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest .
+          docker build -t hello-aws-docker .
           echo "== push ========================================================"
           docker push 719823691862.dkr.ecr.ap-northeast-2.amazonaws.com/hello-aws-docker:latest

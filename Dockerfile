@@ -12,7 +12,6 @@ COPY ./nest-cli.json .
 COPY ./package.json .
 COPY ./tsconfig.json .
 COPY ./tsconfig.build.json .
-COPY ./${NODE_ENV}.env .
 
 ENV PATH=${PATH}:./node_modules/.bin
 
